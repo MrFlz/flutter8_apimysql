@@ -41,7 +41,7 @@ class _MyAppState extends State<MyApp> {
       return roles;
 
     }else{
-      throw Exception ("Algo falló en la conexión (creeeo xd )");
+      throw Exception ("Algo fallo en la conexión (creeeo xd )");
     }  
   }
 
