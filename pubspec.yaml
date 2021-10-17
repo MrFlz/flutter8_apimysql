@@ -34,7 +34,8 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  http: ^0.13.3
+  http: ^0.13.3 # necesario para la api y el uso del crud hacia el mismo
+  barcode_scan: ^3.0.1 # para el barcode scanner
 
 dev_dependencies:
   flutter_test:

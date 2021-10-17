@@ -1,5 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.flutter_api_mysql">
+    
+    <!--necesario para el scanner-->
+   <uses-permission android:name="android.permission.CAMERA" />  
+
    <application
         android:label="flutter_api_mysql"
         android:icon="@mipmap/ic_launcher">
