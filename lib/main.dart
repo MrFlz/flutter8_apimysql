@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_api_mysql/Pages/consultar.dart';
+import 'package:flutter_api_mysql/Pages/editar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -7,7 +8,6 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,7 +23,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
   final String title;
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -47,7 +46,8 @@ class _MyHomePageState extends State<MyHomePage> {
               height: 15.0,
               width: 15.0,
             ),         
-            eb_consultar()
+            eb_consultar(),
+            eb_editar()
           ],
         ),
       )
@@ -61,6 +61,18 @@ class _MyHomePageState extends State<MyHomePage> {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context)=> Consulta() ),                                     
+        )
+      }
+    );
+  }
+
+  Widget eb_editar(){
+    return ElevatedButton(
+      child: const Text("Editar"),
+      onPressed: ()=>{                
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context)=> Edita() ),                                     
         )
       }
     );
