@@ -126,7 +126,7 @@ class _ConsultaState extends State<Consulta>{
       title: 'flutter_api_mysql',
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('API dotnet + mysql'),
+          title: const Text('Consultar Rol'),
         ),
         body: cuerpo(),
         floatingActionButton: FloatingActionButton(

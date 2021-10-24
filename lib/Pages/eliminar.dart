@@ -7,14 +7,16 @@ import 'package:http/http.dart' as http; //encapsula paquete importado en un obj
 
 import 'package:barcode_scan/barcode_scan.dart';
 
-class Edita extends StatefulWidget {
-  Edita({Key? key}) : super(key: key);  
+class Elimina extends StatefulWidget {
+  Elimina({Key? key}) : super(key: key);  
   @override
-  State<Edita> createState() => _EditaState();  
+  State<Elimina> createState() => _EliminaState();  
 }
 
-class _EditaState extends State<Edita>{
+class _EliminaState extends State<Elimina>{ 
+
   ScanResult ? _scanResult;
+
   final ButtonStyle _style = ElevatedButton.styleFrom( //estilo del botón (pueden usarlo varios botones y crearse varios styles)
     textStyle: const TextStyle(
       fontSize: 20
@@ -23,11 +25,12 @@ class _EditaState extends State<Edita>{
   final _tectrl_tf_roleid = TextEditingController(); // Crea un controlador de texto. Lo usaremos para recuperar el valor actual del TField
   
   String geturl="http://192.168.100.43:5000/role/aget/";
+  String delurel="http://192.168.100.43:5000/role/adel/";
   
   var item;
-  var qrcontent=0; 
+  //var rol; //averiguar pq si se deja esto, permanece el ultimo valor obtenido y pintado
+  var qrcontent=0;
   var result;
-  int rid=0; //parámetro para enviar al input de enviar
 
   List<Widget> _listRoles(data){
     List<Widget> roles = [];
@@ -43,12 +46,10 @@ class _EditaState extends State<Edita>{
                 child: Text(rol.rname.substring(0,2))
               ),
               trailing: const Icon(Icons.arrow_forward_ios),
-              onLongPress: () {
-                rid = int.parse(rol.rid.toString()); //se asigna el id del rol para enviarla a otra clase
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context)=> EditaInput(rid)), //se pasa el parámetro deseado, este mismo debe existir en la clase a enviar                                     
-                );
+              onLongPress: () {                
+                print("eliminando... "+rol.rid.toString());
+                //Navigator.pop(context);
+                _eliminaAlert(rol.rid.toString());                
               }
             ),
           ),
@@ -91,7 +92,7 @@ class _EditaState extends State<Edita>{
       final jsonData = jsonDecode(body);
 
       //filtrar y ****agregar objetos de tipo rol en la lista creada anteriormente
-      for ( item in jsonData){
+      for ( item in jsonData){ //se podría optimizar, si solo hiciera la consulta de 1 solo, en lugar de pintar solo 1 elegido por el qr después de hacer la consulta de todos...
         if(item["roleid"]==qrcontent){
           roles.add(
             Rol(item["roleid"], item["rolename"])
@@ -103,6 +104,16 @@ class _EditaState extends State<Edita>{
     }else{
       throw Exception ("Algo fallo en la conexión (creeeo xd )");
     }  
+  }
+
+  Future<http.Response> _delRoles(String id) async {
+    final http.Response response = await http.delete(
+      Uri.parse(delurel+id),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    return response;
   }
 
   Future<void> _ft_qr_scan() async {
@@ -122,20 +133,20 @@ class _EditaState extends State<Edita>{
   void initState() { // función propia de Flutter que se ejecuta al abrirse una ventana, es lo primero que se ejecuta
     super.initState();    
   }  
-  
+
   @override
   void dispose() {
     super.dispose();    
     _tectrl_tf_roleid.dispose(); // Limpia el controlador cuando el Widget se descarte    
   }
-    
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'flutter_api_mysql',
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Editar Rol'),
+          title: const Text('Eliminar Rol'),
         ),
         body: cuerpo(),
         floatingActionButton: FloatingActionButton(
@@ -174,7 +185,7 @@ class _EditaState extends State<Edita>{
 
   Widget _ftbdr_lv_roleslist(){
     return FutureBuilder (
-      future:  _scanResult==null ? _getRoles() : _getRoles_byId(), //si no hay escaneo, muestra todo, si hay, filtra
+      future:  _scanResult==null && qrcontent==0 ? _getRoles() : _getRoles_byId(), //si no hay escaneo, muestra todo, si hay, filtra
       builder: (context, snapshot) {
         if (snapshot.hasData){   
           return Expanded(
@@ -224,145 +235,35 @@ class _EditaState extends State<Edita>{
   //END PERSONAL WIDGETS <===================
 
   // INIT FUNCIONES / METODOS <==================  
-  // INIT FUNCIONES / METODOS <==================
-}
-
-class EditaInput extends StatelessWidget {
-  EditaInput(this.rid, {Key? key}) : super(key: key); //inicializamos la variable por recibir en el constructor de la clase
-
-  final ButtonStyle _style = ElevatedButton.styleFrom( //estilo del botón (pueden usarlo varios botones y crearse varios styles)
-    textStyle: const TextStyle(
-      fontSize: 20
-    )
-  );
-  final _tectrl_tf_rolename = TextEditingController(); // Crea un controlador de texto. Lo usaremos para recuperar el valor actual del TField
-  
-  String puturl='http://192.168.100.43:5000/role/aput/';
-  final int rid; //agregamos variable a recibir
-  
-  Future<http.Response> _putRoles(String rolename, String id) { //necesario especificar el tipo de variable aún cuando las comas las separen, si no se especifica, se convertirá en dynamic, causando posibles conflictos
-    return http.put(
-      Uri.parse(puturl+id),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'rolename': rolename,
-      }),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Editar Rol',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Editando Rol...'),
-        ),
-        body: cuerpo(context)
-      ),
-    );
-  }
-
-  Widget cuerpo(BuildContext context){
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min, 
-
-        children: <Widget>[
-          _tf_rolename(),
-          const SizedBox(height: 10),
-          _bt_update(context),
-          Text(rid.toString())
-        ]
-      )
-    );
-  }
-
-  Widget _tf_rolename(){
-    String charPattern=r'(^[a-zA-Z]*$)'; //expresion regular para una CADENA de caracteres, sin admitir espacios
-
-    return Expanded(  //limita el tamaño de expansión del textfield (oséase: ancho)
-      child: TextField(
-        inputFormatters: <TextInputFormatter>[
-          FilteringTextInputFormatter.allow(RegExp(charPattern)), //solo permite el contenido de una expresion regular
-          LengthLimitingTextInputFormatter(15) //limita el tamaño de la cadena
-        ],
-        //keyboardType: const TextInputType.numberWithOptions(), //cambia el tipo de teclado, no necesario para caracteres
-        controller: _tectrl_tf_rolename, //asociamos el TextEditingController como propiedad del TextField
-        decoration: const InputDecoration( //preferible const por los datos que maneja
-          hintText: "Input new Rolename...",
-          fillColor: Colors.white,
-          filled: true
-        )
-      )
-    );
-  }
-
-  Widget _bt_update(BuildContext context){
-    return ElevatedButton(
-      style: _style,
-      onPressed: (){ // investigar sobre el ()=>{} es necesario? 
-        if(_tectrl_tf_rolename.text.isEmpty || _tectrl_tf_rolename.text.length < 4){
-          showDialog( //alerta del rolename no aceptado por null, espacios o falta caracteres mínimos 4
-            context: context,          
-            builder: ( _ ) => AlertDialog(
-              title: const Text("Rolename no aceptado :("),
-              content: const Text("¡Ingrese al menos 4 caracteres sin espacios!"),
-              actions: [
-                TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text("Aceptar",
-                  style: TextStyle(
-                    color: Colors.blue
-                  )
-                )
+  _eliminaAlert(String srid){
+    showDialog( //alerta sobre gaurdar los datos antes de Actualizar
+      context: context,
+      builder: ( _ ) => AlertDialog(
+        title: const Text("Eliminar Rol"),
+        content: const Text("¿Desea BORRAR PERMANENTEMENTE estos datos?"),
+        actions: [
+          TextButton(
+            onPressed: (){
+              _delRoles(srid); //llamar al future para actualizar mandando lo ingresado en el TextField
+              Navigator.pop( _ ); //cierra el alertDialog
+            },
+            child: const Text("Borrar")
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("Cancelar",
+              style: TextStyle(
+                color: Colors.red
               )
-              ]
-            )          
-          );
-        } else if(_tectrl_tf_rolename.text.length >= 4){
-          showDialog( //alerta sobre gaurdar los datos antes de Actualizar
-            context: context, 
-            builder: ( _ ) => AlertDialog(
-              title: const Text("Actualizar nombre del rol"),
-              content: const Text("¿Estas seguro de guardar estos datos?"),
-              actions: [              
-                TextButton(
-                  onPressed: (){                                
-                    _putRoles(_tectrl_tf_rolename.text,rid.toString()); //llamar al future para actualizar mandando lo ingresado en el TextField
-                    Navigator.pop( _ ); //cierra el alertDialog
-                    Navigator.pop( _ ); //cierra esta clase (ventana input editar)                    
-                  },
-                  child: const Text("Guardar")
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text("Cancelar",
-                    style: TextStyle(
-                      color: Colors.red
-                    )
-                  )
-                )
-              ]
-            ) 
-          );
-        } else {
-          print("algún error en los AlertDialog :c");
-        }        
-        /* _putRoles(_tectrl_tf_rolename.text); //llamar al future para actualizar mandando lo ingresado en el TextField           
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context)=> Edita() )                                
-        ); */
-      }, 
-      child: const Text("Actualizar")          
+            )
+          )
+        ]
+      ) 
     );
-  } 
+  }
+  // END FUNCIONES / METODOS <==================
+
 }
+

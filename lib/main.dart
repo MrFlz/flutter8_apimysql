@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_api_mysql/Pages/agregar.dart';
 import 'package:flutter_api_mysql/Pages/consultar.dart';
 import 'package:flutter_api_mysql/Pages/editar.dart';
+import 'package:flutter_api_mysql/Pages/eliminar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,11 +13,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'API dotnet + mysql',
+      title: 'API dotnet + mysqlbbbb',
       theme: ThemeData( 
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'api CRUD mysql + navigator'),
+      home: const MyHomePage(title: 'api CRUD mysql + navigatorrrr'),
     );
   }
 }
@@ -28,15 +30,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
-  Widget build(BuildContext context) {
-    
+  Widget build(BuildContext context) {    
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -47,10 +46,28 @@ class _MyHomePageState extends State<MyHomePage> {
               width: 15.0,
             ),         
             eb_consultar(),
-            eb_editar()
+            eb_agregar(),
+            eb_editar(),
+            eb_eliminar()
           ],
         ),
       )
+    );
+  }
+
+  Widget eb_agregar(){
+    return ElevatedButton(
+      child: const Text("Agregar"),
+      style: ElevatedButton.styleFrom( //asignarle color de back y fore ground al elevated button
+        primary: Colors.green //background
+        //onPrimary: Colors.green //foreground, default: blanco 
+      ),
+      onPressed: ()=>{                
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context)=> AgregaInput() ),                                     
+        )
+      }
     );
   }
 
@@ -69,10 +86,30 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget eb_editar(){
     return ElevatedButton(
       child: const Text("Editar"),
+      style: ElevatedButton.styleFrom( //asignarle color de back y fore ground al elevated button
+        primary: Colors.orange //background
+        //onPrimary: Colors.green //foreground, default: blanco 
+      ),
       onPressed: ()=>{                
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context)=> Edita() ),                                     
+        )
+      }
+    );
+  }
+
+  Widget eb_eliminar(){
+    return ElevatedButton(
+      child: const Text("Eliminar"),
+      style: ElevatedButton.styleFrom( //asignarle color de back y fore ground al elevated button
+        primary: Colors.red, //background
+        //onPrimary: Colors.green //foreground, default: blanco 
+      ),
+      onPressed: ()=>{                
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context)=> Elimina() ),                                     
         )
       }
     );

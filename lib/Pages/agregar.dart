@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_api_mysql/Pages/editar.dart';
-import 'package:http/http.dart' as http;
+//import 'package:flutter_api_mysql/Models/Rol.dart';
+import 'package:flutter_api_mysql/Pages/consultar.dart';
+import 'package:http/http.dart' as http; //encapsula paquete importado en un objeto para ser fácil su acceso y manipulación
 
-class EditaInput extends StatelessWidget {
-  EditaInput(this.rid, {Key? key}) : super(key: key); //inicializamos la variable por recibir en el constructor de la clase
+class AgregaInput extends StatelessWidget {
+  AgregaInput(/* this.rid, */ {Key? key}) : super(key: key); //inicializamos la variable por recibir en el constructor de la clase
 
   final ButtonStyle _style = ElevatedButton.styleFrom( //estilo del botón (pueden usarlo varios botones y crearse varios styles)
     textStyle: const TextStyle(
@@ -14,16 +15,12 @@ class EditaInput extends StatelessWidget {
   );
   final _tectrl_tf_rolename = TextEditingController(); // Crea un controlador de texto. Lo usaremos para recuperar el valor actual del TField
   
-  String puturl='http://192.168.100.43:5000/role/aput/';
-  String strid=""; //inicializamos una string para posteriormente enlazarla a la url
-  final int rid; //agregamos variable a recibir  
-  //String rolename=""; // dato a actualizar
-
-  Future<http.Response> _putRoles(String rolename) {
-    strid = rid.toString(); //se convierte el id del rol en string para poder enlazarce al url
-
-    return http.put(
-      Uri.parse(puturl+strid),
+  String posturl='http://192.168.100.43:5000/role/apost/';
+  //final int rid; //agregamos variable a recibir
+  
+  Future<http.Response> _postRoles(String rolename) { //necesario especificar el tipo de variable aún cuando las comas las separen, si no se especifica, se convertirá en dynamic, causando posibles conflictos
+    return http.post(
+      Uri.parse(posturl),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -36,10 +33,10 @@ class EditaInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Editar Rol',
+      title: 'Agregar Rol',
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Editando Rol...'),
+          title: const Text('Agregando Rol...'),
         ),
         body: cuerpo(context)
       ),
@@ -56,7 +53,7 @@ class EditaInput extends StatelessWidget {
           _tf_rolename(),
           const SizedBox(height: 10),
           _bt_update(context),
-          Text(rid.toString())
+          //Text(rid.toString())
         ]
       )
     );
@@ -85,7 +82,7 @@ class EditaInput extends StatelessWidget {
   Widget _bt_update(BuildContext context){
     return ElevatedButton(
       style: _style,
-      onPressed: (){ // el => es necesario para usar el context en Navigator
+      onPressed: (){ // investigar sobre el ()=>{} es necesario? 
         if(_tectrl_tf_rolename.text.isEmpty || _tectrl_tf_rolename.text.length < 4){
           showDialog( //alerta del rolename no aceptado por null, espacios o falta caracteres mínimos 4
             context: context,          
@@ -110,22 +107,20 @@ class EditaInput extends StatelessWidget {
           showDialog( //alerta sobre gaurdar los datos antes de Actualizar
             context: context, 
             builder: ( _ ) => AlertDialog(
-              title: const Text("Actualizar nombre del rol"),
-              content: const Text("¿Estas seguro de guardar estos datos?"),
-              actions: [              
+              title: const Text("Agregar nombre del rol"),
+              content: const Text("¿Desea agregar este rol?"),
+              actions: [      
                 TextButton(
-                  onPressed: (){                                
-                    _putRoles(_tectrl_tf_rolename.text); //llamar al future para actualizar mandando lo ingresado en el TextField
+                  onPressed: (){           
+                    _postRoles(_tectrl_tf_rolename.text); //llamar al future para actualizar mandando lo ingresado en el TextField
                     Navigator.pop( _ ); //cierra el alertDialog
-                    Navigator.pop( _ ); //cierra ventana input editar
-                    /* Navigator.push( //abre ventana editar //ya no es necesario, porque ya se repinta en automatico, solo basta cerrarlo para regresar a la anterior (ya actualizada)
+                    Navigator.pop( _ ); //cierra esta clase (ventana input agregar)  
+                    Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: ( _ )=> Edita()
-                      )
-                    ); */
+                      MaterialPageRoute(builder: (context)=> Consulta() ),                                     
+                    );               
                   },
-                  child: const Text("Guardar")
+                  child: const Text("Agregar")
                 ),
                 TextButton(
                   onPressed: () {
@@ -153,5 +148,3 @@ class EditaInput extends StatelessWidget {
     );
   } 
 }
-
-
