@@ -22,9 +22,8 @@ class _EditaState extends State<Edita>{
   );
   final _tectrl_tf_roleid = TextEditingController(); // Crea un controlador de texto. Lo usaremos para recuperar el valor actual del TField
   
-  String geturl="http://192.168.100.43:5000/role/aget/";
-  
-  var item;
+  String geturl="http://192.168.100.43:5000/role/aget/";  
+  //var item;
   var qrcontent=0; 
   var result;
   int rid=0; //parámetro para enviar al input de enviar
@@ -61,13 +60,11 @@ class _EditaState extends State<Edita>{
   Future<List<Rol>> _getRoles() async {
     final response = await http.get(Uri.parse(geturl));
     List<Rol> roles = [];
-
     if(response.statusCode == 200){
       String body = utf8.decode(response.bodyBytes);
       final jsonData = jsonDecode(body);
-
       //agregar objetos de tipo rol en la lista creada anteriormente
-      for ( item in jsonData){
+      for (var item in jsonData){
         if (mounted) { // mounted comprueba si state del objeto (roles) está actualmente en una tree, esto es necesario cuando se llama setState en un método async, aquí se usa para repintar la lista ACTUALIZADA
           setState(() {
             roles.add(
@@ -85,13 +82,11 @@ class _EditaState extends State<Edita>{
   Future<List<Rol>> _getRoles_byId() async {
     final response = await http.get(Uri.parse(geturl));
     List<Rol> roles = [];
-
     if(response.statusCode == 200){
       String body = utf8.decode(response.bodyBytes);
       final jsonData = jsonDecode(body);
-
       //filtrar y ****agregar objetos de tipo rol en la lista creada anteriormente
-      for ( item in jsonData){
+      for (var item in jsonData){
         if(item["roleid"]==qrcontent){
           roles.add(
             Rol(item["roleid"], item["rolename"])
@@ -275,8 +270,7 @@ class EditaInput extends StatelessWidget {
     return Center(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min, 
-
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           _tf_rolename(),
           const SizedBox(height: 10),

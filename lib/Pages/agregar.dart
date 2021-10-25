@@ -34,7 +34,7 @@ class AgregaInput extends StatelessWidget {
     return MaterialApp(
       title: 'Agregar Page',
       theme: ThemeData(
-        primarySwatch: Colors.green
+        primarySwatch: Colors.green //color tema del activity
       ),
       home: Scaffold(
         appBar: AppBar(
