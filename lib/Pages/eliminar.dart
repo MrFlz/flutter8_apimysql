@@ -1,10 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:flutter_api_mysql/Models/Rol.dart';
 import 'package:http/http.dart' as http; //encapsula paquete importado en un objeto para ser fácil su acceso y manipulación
-
 import 'package:barcode_scan/barcode_scan.dart';
 
 class Elimina extends StatefulWidget {
@@ -13,10 +11,8 @@ class Elimina extends StatefulWidget {
   State<Elimina> createState() => _EliminaState();  
 }
 
-class _EliminaState extends State<Elimina>{ 
-
+class _EliminaState extends State<Elimina>{
   ScanResult ? _scanResult;
-
   final ButtonStyle _style = ElevatedButton.styleFrom( //estilo del botón (pueden usarlo varios botones y crearse varios styles)
     textStyle: const TextStyle(
       fontSize: 20
@@ -143,10 +139,13 @@ class _EliminaState extends State<Elimina>{
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'flutter_api_mysql',
+      title: 'Eliminar Page',
+      theme: ThemeData(
+        primarySwatch: Colors.red
+      ),
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Eliminar Rol'),
+          title: const Text('Eliminando Rol...'),
         ),
         body: cuerpo(),
         floatingActionButton: FloatingActionButton(

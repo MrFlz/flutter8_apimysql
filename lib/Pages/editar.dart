@@ -133,9 +133,12 @@ class _EditaState extends State<Edita>{
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'flutter_api_mysql',
+      theme: ThemeData(
+        primarySwatch: Colors.orange
+      ),
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Editar Rol'),
+          title: const Text('Editar Rol'),  
         ),
         body: cuerpo(),
         floatingActionButton: FloatingActionButton(
@@ -255,7 +258,10 @@ class EditaInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Editar Rol',
+      title: 'Editar Page',
+      theme: ThemeData(
+        primarySwatch: Colors.orange
+      ),
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Editando Rol...'),

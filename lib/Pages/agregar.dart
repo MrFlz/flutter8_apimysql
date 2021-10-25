@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-//import 'package:flutter_api_mysql/Models/Rol.dart';
 import 'package:flutter_api_mysql/Pages/consultar.dart';
 import 'package:http/http.dart' as http; //encapsula paquete importado en un objeto para ser fácil su acceso y manipulación
 
@@ -33,7 +32,10 @@ class AgregaInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Agregar Rol',
+      title: 'Agregar Page',
+      theme: ThemeData(
+        primarySwatch: Colors.green
+      ),
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Agregando Rol...'),
@@ -109,16 +111,16 @@ class AgregaInput extends StatelessWidget {
             builder: ( _ ) => AlertDialog(
               title: const Text("Agregar nombre del rol"),
               content: const Text("¿Desea agregar este rol?"),
-              actions: [      
+              actions: [
                 TextButton(
-                  onPressed: (){           
+                  onPressed: (){
                     _postRoles(_tectrl_tf_rolename.text); //llamar al future para actualizar mandando lo ingresado en el TextField
                     Navigator.pop( _ ); //cierra el alertDialog
                     Navigator.pop( _ ); //cierra esta clase (ventana input agregar)  
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context)=> Consulta() ),                                     
-                    );               
+                      MaterialPageRoute(builder: (context)=> Consulta() ),                              
+                    );
                   },
                   child: const Text("Agregar")
                 ),
@@ -133,18 +135,18 @@ class AgregaInput extends StatelessWidget {
                   )
                 )
               ]
-            ) 
+            )
           );
         } else {
           print("algún error en los AlertDialog :c");
-        }        
+        }
         /* _putRoles(_tectrl_tf_rolename.text); //llamar al future para actualizar mandando lo ingresado en el TextField           
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context)=> Edita() )                                
         ); */
-      }, 
-      child: const Text("Actualizar")          
+      },
+      child: const Text("Actualizar")        
     );
-  } 
+  }
 }

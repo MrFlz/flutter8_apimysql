@@ -13,7 +13,6 @@ class Consulta extends StatefulWidget {
 
 class _ConsultaState extends State<Consulta>{
   ScanResult ? _scanResult;
-
   final ButtonStyle _style = ElevatedButton.styleFrom( //estilo del botón (pueden usarlo varios botones y crearse varios styles)
     textStyle: const TextStyle(
       fontSize: 20
@@ -121,12 +120,11 @@ class _ConsultaState extends State<Consulta>{
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
-      title: 'flutter_api_mysql',
+      title: 'Consultar Page',      
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Consultar Rol'),
+          title: const Text('Consultando Rol...'),
         ),
         body: cuerpo(),
         floatingActionButton: FloatingActionButton(

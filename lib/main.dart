@@ -13,11 +13,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'API dotnet + mysqlbbbb',
-      theme: ThemeData( 
+      title: 'CRUD Test by MrFlz',
+      theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'api CRUD mysql + navigatorrrr'),
+      home: const MyHomePage(title: '.NET API CRUD + mysql + navigator'),
     );
   }
 }
@@ -31,20 +31,20 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.title),        
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [   
-            const Text("¿Qué desea hacer?"),   
+          children: [
+            const Text("¿Qué desea hacer?"),
             const SizedBox(
               height: 15.0,
               width: 15.0,
-            ),         
+            ),
             eb_consultar(),
             eb_agregar(),
             eb_editar(),
